@@ -77,59 +77,61 @@ class _ArticleScreenState extends State<ArticleScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue, Colors.blueGrey],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter)
-                ),
-                child: Stack(
-                  children: [
-                    // if (article['image] != null)
-                    Image.network(
-                      '$strapiUrl${article['cover']['url']}',
-                      height: 200,
-                      //fit: BoxFit.contain,
-                      fit: BoxFit.cover, //crop image but will fill card which looks good
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      left: 0,
-                      child: Container(
-                        color: Colors.black38,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                article['title'],
-                                overflow: TextOverflow.clip,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  ),
+              child: Stack(
+                //fit: StackFit.expand,
+                children: [
+                  // if (article['image] != null)
+                  Image.network(
+                    '$strapiUrl${article['cover']['url']}',
+                    height: 200,
+                    //fit: BoxFit.contain,
+                    fit: BoxFit.cover, //crop image but will fill card which looks good
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      color: Colors.black38,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              article['title'],
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                                 ),
-                              //card description, might delete because it must be short in order to be readable.
-                              Text( 
-                                overflow: TextOverflow.ellipsis,
-                                article['description'],
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.white,
-                                  ),
+                              ),
+                            //card description, might delete because it must be short in order to be readable.
+                            Text( 
+                              overflow: TextOverflow.ellipsis,
+                              article['description'],
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
                                 ),
-                            ],
-                          ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () {},
+                        //splashColor: Colors.amber,
+                      ),
+                    )
+                    )
+                ],
               ),
             );
           },
