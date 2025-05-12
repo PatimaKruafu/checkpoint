@@ -85,10 +85,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     end: Alignment.bottomCenter)
                 ),
                 child: Stack(
-                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // if (article['image] != null)
-                    //Ink.image(image: )
                     Image.network(
                       '$strapiUrl${article['cover']['url']}',
                       height: 200,
