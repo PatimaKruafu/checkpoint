@@ -126,7 +126,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, 
+                          MaterialPageRoute(builder: (context) => PageSelect()),
+                          );
+                        },
                         //splashColor: Colors.amber,
                       ),
                     )

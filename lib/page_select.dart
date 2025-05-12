@@ -35,7 +35,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
     final response =
         await http.get(Uri.parse('$strapiUrl/api/articles?populate=*'));
     if (response.statusCode == 200) {
-      print('Raw API Response: ${jsonEncode(response.body)}');
+      //print('Raw API Response: ${jsonEncode(response.body)}');
       setState(() {
         articles = jsonDecode(response.body)['data'];
       });
@@ -50,8 +50,23 @@ class _ArticleScreenState extends State<ArticleScreen> {
           itemCount: articles.length,
           itemBuilder: (context, index) {
             var article = articles[index];
-            debugPrint(article.toString());
-            
+            //debugPrint(article.toString());
+            return Card(
+              child: Row(
+                children: [
+                  Text(
+                    article['title'],
+                    //'${article['blocks'][0]['body']}',
+                    //"test text row",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
+            );
           },
         ),
       );
