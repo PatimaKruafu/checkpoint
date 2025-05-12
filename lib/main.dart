@@ -3,15 +3,24 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:convert';
 
-import 'package:checkpoint/info.dart';
+import 'package:checkpoint/page_select.dart';
 
 const String strapiUrl = 'http://localhost:1337';
+
+double imageWidth = 200.0;
+double imageHeight = 100.0;
+
+double gridCrossAxisSpacing = 10.0;
+
+double coverImagePadding = gridCrossAxisSpacing * 0.8;
 
 void main() {
   runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,6 +30,8 @@ class MainApp extends StatelessWidget {
 }
 
 class ArticleScreen extends StatefulWidget {
+  const ArticleScreen({super.key});
+
   @override
   _ArticleScreenState createState() => _ArticleScreenState();
 }
@@ -38,7 +49,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
     final response =
         await http.get(Uri.parse('$strapiUrl/api/articles?populate=*'));
     if (response.statusCode == 200) {
-      print('Raw API Response: ${jsonEncode(response.body)}');
+      //print('Raw API Response: ${jsonEncode(response.body)}');
       setState(() {
         articles = jsonDecode(response.body)['data'];
       });
@@ -49,37 +60,78 @@ class _ArticleScreenState extends State<ArticleScreen> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(title: Text('Strapi + Flutter')),
-        body: ListView.builder(
+        body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 0.0,
+            crossAxisSpacing: 0.0,
+            ),
           itemCount: articles.length,
           itemBuilder: (context, index) {
             var article = articles[index];
-            debugPrint(article.toString());
+            //debugPrint(article.toString());
             return Card(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // if (article['image] != null)
-                  Image.network('$strapiUrl${article['cover']['url']}'),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article['title'],
-                          style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5),
-                          Text(article['description']),
-                          //Text('${article['blocks'][0]['body']}'),
-                        MarkdownBody(data: article['blocks'][0]['body']),
-                      ],
+              shadowColor: Colors.cyan[200],
+              elevation: 4.0,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.blueGrey],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter)
+                ),
+                child: Stack(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // if (article['image] != null)
+                    //Ink.image(image: )
+                    Image.network(
+                      '$strapiUrl${article['cover']['url']}',
+                      height: 200,
+                      //fit: BoxFit.contain,
+                      fit: BoxFit.cover, //crop image but will fill card which looks good
                     ),
-                    
-                  ),
-                ],
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        color: Colors.black38,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                article['title'],
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  ),
+                                ),
+                              //card description, might delete because it must be short in order to be readable.
+                              Text( 
+                                overflow: TextOverflow.ellipsis,
+                                article['description'],
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },

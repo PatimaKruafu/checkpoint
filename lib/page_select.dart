@@ -4,11 +4,9 @@ import 'dart:convert';
 
 const String strapiUrl = 'http://localhost:1337';
 
-void main() {
-  runApp(SecondScreen());
-}
+class PageSelect extends StatelessWidget {
+  const PageSelect({super.key});
 
-class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,6 +16,8 @@ class SecondScreen extends StatelessWidget {
 }
 
 class ArticleScreen extends StatefulWidget {
+  const ArticleScreen({super.key});
+
   @override
   _ArticleScreenState createState() => _ArticleScreenState();
 }
@@ -51,31 +51,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
           itemBuilder: (context, index) {
             var article = articles[index];
             debugPrint(article.toString());
-            return Card(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // if (article['image] != null)
-                  Image.network('$strapiUrl${article['cover']['url']}'),
-                  Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article['title'],
-                          style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 5),
-                          Text(article['description']),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
+            
           },
         ),
       );
