@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_html/flutter_html.dart';
 import 'dart:convert';
 
 const String strapiUrl = 'http://localhost:1337';
@@ -52,19 +53,29 @@ class _ArticleScreenState extends State<ArticleScreen> {
             var article = articles[index];
             //debugPrint(article.toString());
             return Card(
-              child: Row(
-                children: [
-                  Text(
-                    article['title'],
-                    //'${article['blocks'][0]['body']}',
-                    //"test text row",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal
+              child: Padding(
+                padding: const EdgeInsets.all(8.0).copyWith(top: 4),
+                child: Column(
+                  children: [
+                    Text(
+                      article['title'],
+                      //'${article['blocks'][0]['body']}',
+                      //"test text row",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
+                    SizedBox(
+                      height: 400,
+                      width: 350,
+                      child: Html(
+                        data: '${article['content']}'
+                        ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
