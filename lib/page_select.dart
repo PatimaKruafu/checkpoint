@@ -11,19 +11,19 @@ class PageSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ArticleScreen(),
+      home: PageSelectScreen(),
     );
   }
 }
 
-class ArticleScreen extends StatefulWidget {
-  const ArticleScreen({super.key});
+class PageSelectScreen extends StatefulWidget {
+  const PageSelectScreen({super.key});
 
   @override
-  _ArticleScreenState createState() => _ArticleScreenState();
+  _PageSelectScreenState createState() => _PageSelectScreenState();
 }
 
-class _ArticleScreenState extends State<ArticleScreen> {
+class _PageSelectScreenState extends State<PageSelectScreen> {
   List articles = [];
 
   @override
@@ -46,7 +46,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
     Widget build(BuildContext context) {
       return Scaffold(
-        appBar: AppBar(title: Text('Strapi + Flutter')),
+        appBar: AppBar(
+          title: Text('Strapi + Flutter'),
+          // no app bar, only back to homepage button 
+          
+        ),
         body: ListView.builder(
           itemCount: articles.length,
           itemBuilder: (context, index) {

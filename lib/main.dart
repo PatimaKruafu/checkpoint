@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_html/flutter_html.dart';
-//import 'package:flutter_markdown/flutter_markdown.dart';
 import 'dart:convert';
 
 import 'package:checkpoint/page_select.dart';
