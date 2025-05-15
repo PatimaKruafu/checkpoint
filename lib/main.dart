@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_html/flutter_html.dart';
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 import 'package:checkpoint/page_select.dart';
 
@@ -46,14 +45,10 @@ class _ArticleScreenState extends State<ArticleScreen> {
   }
 
   Future<void> fetchArticles() async {
-    final response =
-        await http.get(Uri.parse('$strapiUrl/api/articles?populate=*'));
-    if (response.statusCode == 200) {
-      //print('Raw API Response: ${jsonEncode(response.body)}');
-      setState(() {
-        articles = jsonDecode(response.body)['data'];
-      });
-    }
+    final String response = await rootBundle.loadString('assets/temp/articles.json');
+    setState(() {
+      articles = jsonDecode(response)['data'];
+    });
   }
 
   @override
