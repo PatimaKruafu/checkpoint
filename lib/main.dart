@@ -24,6 +24,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xFFF8F8F8), // Soft white
+      ),
       home: ArticleScreen(),
     );
   }
@@ -37,7 +40,7 @@ class ArticleScreen extends StatefulWidget {
 }
 
 class _ArticleScreenState extends State<ArticleScreen> {
-  List articles = [];
+  List books = [];
 
   @override
   void initState() {
@@ -47,11 +50,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   Future<void> fetchArticles() async {
     final response =
-        await http.get(Uri.parse('$strapiUrl/api/articles?populate=*'));
+        await http.get(Uri.parse('$strapiUrl/api/books?populate=*'));
     if (response.statusCode == 200) {
       //print('Raw API Response: ${jsonEncode(response.body)}');
       setState(() {
-        articles = jsonDecode(response.body)['data'];
+        books = jsonDecode(response.body)['data'];
       });
     }
   }
@@ -59,17 +62,30 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
     Widget build(BuildContext context) {
       return Scaffold(
-        appBar: AppBar(title: Text('Strapi + Flutter')),
-        body: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 0.0,
-            crossAxisSpacing: 0.0,
+        appBar: AppBar(
+            backgroundColor: Color(0xFFF8F8F8),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MainApp())
+                );
+              },
             ),
-          itemCount: articles.length,
+          ),
+        body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            //crossAxisCount: 2,
+            maxCrossAxisExtent: 265,
+            mainAxisExtent: 200,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+            childAspectRatio: 0.75,
+            ),
+          itemCount: books.length,
           itemBuilder: (context, index) {
-            var article = articles[index];
-            //debugPrint(article.toString());
+            var book = books[index];
+            //debugPrint(book.toString());
             return Card(
               shadowColor: Colors.cyan[200],
               elevation: 4.0,
@@ -80,12 +96,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
               child: Stack(
                 //fit: StackFit.expand,
                 children: [
-                  // if (article['image] != null)
-                  Image.network(
-                    '$strapiUrl${article['cover']['url']}',
-                    height: 200,
-                    //fit: BoxFit.contain,
-                    fit: BoxFit.cover, //crop image but will fill card which looks good
+                  //if (book['cover'] != null && cover['url'] != null && cover['url'].toString().isNotEmpty)
+                  Center(
+                    child: Image.network(
+                      '$strapiUrl${book['cover']['url']}',
+                      height: 200,
+                      //fit: BoxFit.contain,
+                      fit: BoxFit.cover, //crop image but will fill card which looks good
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -99,7 +117,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              article['title'],
+                              book['title'],
                               overflow: TextOverflow.clip,
                               style: TextStyle(
                                 fontSize: 14,
@@ -110,7 +128,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                             //card description, might delete because it must be short in order to be readable.
                             Text( 
                               overflow: TextOverflow.ellipsis,
-                              article['description'],
+                              book['description'] ?? '',
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
@@ -128,7 +146,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
                       child: InkWell(
                         onTap: () {
                           Navigator.push(context, 
-                          MaterialPageRoute(builder: (context) => PageSelect()),
+                          MaterialPageRoute(builder: (context) => PageSelect(bookId: book['book_id'] ?? '')),
                           );
                         },
                         //splashColor: Colors.amber,
